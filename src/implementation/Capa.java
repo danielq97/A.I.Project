@@ -16,7 +16,7 @@ public class Capa {
     	this.neuronasFuente = neuronasFuente;
     	this.neuronasDestino = neuronasDestino;
     	
-    	salidaCapa = new double [neuronasFuente];
+    	salidaCapa = new double [neuronasDestino];
     	generarMatriz();
     }
     
