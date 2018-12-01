@@ -35,6 +35,7 @@ public class RedNeuronal {
 		//Primera capa
 		capas.add(new Capa(X.length, tamCapasOcultas[0]));		
 		
+		System.out.println(X.length);
 		//capas ocultas		
 		for(int i = 1; i < tamCapasOcultas.length; i++) {
 			capas.add(new Capa(tamCapasOcultas[i-1], tamCapasOcultas[i]));			
@@ -54,6 +55,11 @@ public class RedNeuronal {
 	}
 	
 	
+	
+	public void backpropagation() {
+		
+		
+	}
 	
 	
 	
