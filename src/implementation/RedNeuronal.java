@@ -16,19 +16,43 @@ public class RedNeuronal {
 	private int[] tamCapasOcultas;
 
 	private ArrayList<Capa> capas;
+	
+	private double learningRate;
+	private double minLearning;
 
-	public RedNeuronal(Double[][] X, Double[] Y, int[] tamCapasOcultas) {
+	public RedNeuronal(Double[][] X, Double[] Y, int[] tamCapasOcultas, double learningRate, double minLearning) {
 		this.X = X;
 		this.Y = Y;
 		this.tamCapasOcultas = tamCapasOcultas;
+		this.learningRate = learningRate;
+		this.learningRate = minLearning;
 
 		this.capas = new ArrayList<Capa>();
 
 		inicializarRed();
+		
+		 
 		for (int i = 0; i < capas.size(); i++) {
 			Capa capa = capas.get(i);
 			System.out.println(capa.getNeuronasFuente() + "-" + capa.getNeuronasDestino());
 		}
+	}
+	
+	//Metodo para entrenar la red.
+	public void entrenarRed() {
+		boolean keepLearning = true;
+		while(keepLearning) {
+			//feedforward
+			backpropagation();
+			double[] erroresUltimaCapa = capas.get(capas.size()-1).getErrores();
+			for(int i = 0; i < erroresUltimaCapa.length; i++) {
+				if(erroresUltimaCapa[i]<minLearning) {keepLearning=false;}
+			}
+		}
+	}
+	
+	public void predecir() {
+		
 	}
 
 	public ArrayList<Capa> getCapas() {

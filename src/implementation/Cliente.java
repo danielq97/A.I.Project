@@ -16,6 +16,7 @@ public class Cliente {
 
 		
 		
+<<<<<<< HEAD
 		//Ensayo ciclos cada vez agregandoCapasDeSalida, cuándo
 		//este el forward se reemplaza agregarCapasSalida
 		red.agregarCapasSalida();
@@ -35,6 +36,14 @@ public class Cliente {
 		
 		
 
+=======
+		RedNeuronal red = new RedNeuronal(x, y, capasOcultas,0.01,0.001);
+		
+		//se entrena la red
+		red.entrenarRed();
+		
+		
+>>>>>>> f2d751db0100e69b9b005aea463251ab0039250a
 	}
 
 }
