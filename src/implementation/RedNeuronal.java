@@ -179,11 +179,11 @@ public class RedNeuronal {
 		Capa ultimaOculta = capas.get(capas.size() - 1);
 		double[] salidasCapa = ultimaOculta.getSalidaCapa();
 		double pesosSalida[][] = ultimaOculta.getPesos();
-		double tasaDeAprendizaje = 0.25;
+		
 		for (int j = 0; j < pesosSalida.length; j++) {
 			for (int k = 0; k < pesosSalida[j].length; k++) {
 				pesosSalida[j][k] = pesosSalida[j][k]
-						+ tasaDeAprendizaje * salidasCapa[k] * respaldoErroresCapaSalida[k];
+						+ learningRate * salidasCapa[k] * respaldoErroresCapaSalida[k];
 			}
 		}
 		// Modifico la matriz de pesos
@@ -207,7 +207,7 @@ public class RedNeuronal {
 				
 
 				for (int k = 0; k < pesosSalida1[j].length; k++) {
-					pesosSalida1[j][k] = pesosSalida1[j][k] + tasaDeAprendizaje * salidasCapa1[k] * erroresCapa[k];
+					pesosSalida1[j][k] = pesosSalida1[j][k] + learningRate * salidasCapa1[k] * erroresCapa[k];
 				}
 			}
 			// Modifico la matriz de pesos
