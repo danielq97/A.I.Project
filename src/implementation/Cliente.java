@@ -8,7 +8,7 @@ public class Cliente {
 		
 		int[] capasOcultas = {3,4,3};
 		
-		RedNeuronal red = new RedNeuronal(x, y, capasOcultas);
+		RedNeuronal red = new RedNeuronal(x, y, capasOcultas,0.01,0.001);
 
 		red.backpropagation();
 	}

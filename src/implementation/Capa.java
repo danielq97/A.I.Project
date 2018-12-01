@@ -10,6 +10,8 @@ public class Capa {
     
     private double[] salidaCapa;
     
+    private double[] errores;
+    
     public Capa(int neuronasFuente, int neuronasDestino) {
     	this.neuronasFuente = neuronasFuente;
     	this.neuronasDestino = neuronasDestino;
@@ -17,7 +19,15 @@ public class Capa {
     	generarMatriz();
     }
     
-    private void generarMatriz() {
+    public double[] getErrores() {
+		return errores;
+	}
+
+	public void setErrores(double[] errores) {
+		this.errores = errores;
+	}
+
+	private void generarMatriz() {
     	pesos = new double[neuronasFuente][neuronasDestino];
     	
     	for(int i = 0; i < neuronasFuente;i++) {
