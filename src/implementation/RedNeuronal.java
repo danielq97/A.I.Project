@@ -1,22 +1,30 @@
 package implementation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class RedNeuronal {
 	
-	private double[][] X;
-	private double[] Y;
+	//Variables independientes.
+	private Double[][] X;
+	
+	//Variables dependientes u objetivos.
+	private Double[] Y;
+	
 	//Arreglo para el numero de neuronas de cada capa oculta.
 	private int[] tamCapasOcultas;
 	
 	private ArrayList<Capa> capas;
 	
-	public RedNeuronal(double[][] X, double[] Y, int[] tamCapasOcultas) {
+	public RedNeuronal(Double[][] X, Double[] Y, int[] tamCapasOcultas) {
 		this.X = X;
 		this.Y = Y;
 		this.tamCapasOcultas = tamCapasOcultas;
 		
 		this.capas = new ArrayList<Capa>();
+		
+		inicializarRed();
 	}
 	
 	private void inicializarRed() {
@@ -25,10 +33,19 @@ public class RedNeuronal {
 		
 		//capas ocultas		
 		for(int i = 1; i < tamCapasOcultas.length; i++) {
-			
+			capas.add(new Capa(tamCapasOcultas[i-1], tamCapasOcultas[i]));
 		}
 		
 		//Capa de salida
+		capas.add(new Capa(tamCapasOcultas[tamCapasOcultas.length-1], getNumNeuronasSalida()));
+	}
+	
+	private int getNumNeuronasSalida() {
+		HashSet<Double> hash = new HashSet<Double>();
+		ArrayList<Double> aux = new ArrayList<Double>(Arrays.asList(Y));
+		hash.addAll(aux);
+		
+		return hash.size();
 	}
 	
 	
