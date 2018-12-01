@@ -8,9 +8,12 @@ public class RedNeuronal {
 
 	// Variables independientes.
 	private Double[][] X;
+	
 
 	// Variables dependientes u objetivos.
 	private Double[] Y;
+
+	
 
 	// Arreglo para el numero de neuronas de cada capa oculta.
 	private int[] tamCapasOcultas;
@@ -19,6 +22,8 @@ public class RedNeuronal {
 	
 	private double learningRate;
 	private double minLearning;
+
+
 
 	public RedNeuronal(Double[][] X, Double[] Y, int[] tamCapasOcultas, double learningRate, double minLearning) {
 		this.X = X;
@@ -105,6 +110,51 @@ public class RedNeuronal {
 			}
 			capas.get(i).setSalidaCapa(salidas);
 		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param x1: matriz que será multiplicada por la matriz de pesos indicada
+	 */
+	
+	
+	public void feedforward(double [][] x1) {
+			
+		
+		/*salida capa*/
+	 double[][] salida= capas.get(0).multiplicacionMtrix(x1, capas.get(0).getPesos());
+	 
+	 /* 2b*/
+	 double[][] c= capas.get(0).Activacion(salida);
+	 
+	 capas.get(0).setSalidaCapa(c[0]);
+	 
+	 double[][] example=new double[1][ capas.get(0).getSalidaCapa().length];
+	 example[0]=capas.get(0).getSalidaCapa();
+	 
+	 
+	 
+	 for ( int i=1; i<capas.size();i++) {
+		 
+		 double[][] salid1= capas.get(i).multiplicacionMtrix(example, capas.get(i).getPesos());
+		 
+		 /* 2b*/
+		 
+		capas.get(i).setSalidaCapa(capas.get(i).Activacion(salid1)[0]) ; 
+		
+ 
+	 }
+	 
+	 
+	 
+	 
+		
 	}
 	
 
