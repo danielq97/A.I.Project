@@ -25,6 +25,10 @@ public class RedNeuronal {
 		this.capas = new ArrayList<Capa>();
 		
 		inicializarRed();
+		for(int i = 0; i < capas.size();i++) {
+			Capa capa = capas.get(i);
+			System.out.println(capa.getNeuronasFuente()+"-"+capa.getNeuronasDestino());
+		}
 	}
 	
 	private void inicializarRed() {
@@ -33,7 +37,7 @@ public class RedNeuronal {
 		
 		//capas ocultas		
 		for(int i = 1; i < tamCapasOcultas.length; i++) {
-			capas.add(new Capa(tamCapasOcultas[i-1], tamCapasOcultas[i]));
+			capas.add(new Capa(tamCapasOcultas[i-1], tamCapasOcultas[i]));			
 		}
 		
 		//Capa de salida
@@ -45,7 +49,8 @@ public class RedNeuronal {
 		ArrayList<Double> aux = new ArrayList<Double>(Arrays.asList(Y));
 		hash.addAll(aux);
 		
-		return hash.size();
+		if(hash.size()>2) {return hash.size();}
+		else {return 1;}
 	}
 	
 	
