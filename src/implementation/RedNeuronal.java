@@ -31,6 +31,14 @@ public class RedNeuronal {
 		}
 	}
 
+	public ArrayList<Capa> getCapas() {
+		return capas;
+	}
+
+	public void setCapas(ArrayList<Capa> capas) {
+		this.capas = capas;
+	}
+
 	private void inicializarRed() {
 		// Primera capa
 		capas.add(new Capa(X.length, tamCapasOcultas[0]));
@@ -41,8 +49,13 @@ public class RedNeuronal {
 			capas.add(new Capa(tamCapasOcultas[i - 1], tamCapasOcultas[i]));
 		}
 
-		// Capa de salida
+		// Capa de última oculta a neuronas salida
 		capas.add(new Capa(tamCapasOcultas[tamCapasOcultas.length - 1], getNumNeuronasSalida()));
+		
+		//Capa salida a salida, (la hago para poderle poner una capa de  salida( ya son las salidas
+		//de la red), y poder calcular los errores
+		capas.add(new Capa(getNumNeuronasSalida(), getNumNeuronasSalida()));
+		System.out.println( " numero neu salidas " + getNumNeuronasSalida());
 	}
 
 	private int getNumNeuronasSalida() {
@@ -56,6 +69,20 @@ public class RedNeuronal {
 			return 1;
 		}
 	}
+	
+	//Este método se hizo, sólo para agregar capas de salida aleatorias
+	//pero todo esto lo debe reemplazar la propagación hacia adelante
+	public void agregarCapasSalida( ) {
+		for (int i = 1; i < capas.size(); i++) {
+			int numeroNeuronasFuente = capas.get(i).getNeuronasFuente();
+			double [] salidas = new double [numeroNeuronasFuente];
+			for (int j = 0; j < salidas.length; j++) {
+				salidas[j] = Math.random();
+			}
+			capas.get(i).setSalidaCapa(salidas);
+		}
+	}
+	
 
 	public void backpropagation() {
 
@@ -107,11 +134,12 @@ public class RedNeuronal {
 				for (int k = 0; k < pesos.length; k++) {
 					sum += pesos[k] * erroresCapaSalida[k];
 				}
-				double error = salidasCapa[i] * (1 - salidasCapa[i]) * sum;
+				double error = salidasCapa[j] * (1 - salidasCapa[j]) * sum;
 				errorCapas[j] = error;
 
 			}
 			// Agrego los errores de cada capa a La lista de Arreglos
+			//i para que inserte dónde es
 			erroresCapasOcultas.set(i - 1, errorCapas);
 			// Actualizo los errores de la capa de salida, que ya van a ser los nuevos,
 			// porque
@@ -152,6 +180,8 @@ public class RedNeuronal {
 
 			double[] erroresCapa = erroresCapasOcultas.get(i);
 			for (int j = 0; j < pesosSalida1.length; j++) {
+				
+
 				for (int k = 0; k < pesosSalida1[j].length; k++) {
 					pesosSalida1[j][k] = pesosSalida1[j][k] + tasaDeAprendizaje * salidasCapa1[j] * erroresCapa[k];
 				}
