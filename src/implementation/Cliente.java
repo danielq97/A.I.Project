@@ -1,8 +1,8 @@
 package implementation;
 
-import java.util.ArrayList;
 
-import org.omg.Messaging.SyncScopeHelper;
+
+
 
 public class Cliente {
 
@@ -12,11 +12,11 @@ public class Cliente {
 
 		int[] capasOcultas = { 3, 4, 3 };
 
-		RedNeuronal red = new RedNeuronal(x, y, capasOcultas);
+		RedNeuronal red = new RedNeuronal(x, y, capasOcultas,0.01,0.001);
 
 		
 		
-<<<<<<< HEAD
+
 		//Ensayo ciclos cada vez agregandoCapasDeSalida, cuándo
 		//este el forward se reemplaza agregarCapasSalida
 		red.agregarCapasSalida();
@@ -36,14 +36,13 @@ public class Cliente {
 		
 		
 
-=======
-		RedNeuronal red = new RedNeuronal(x, y, capasOcultas,0.01,0.001);
+		RedNeuronal red2 = new RedNeuronal(x, y, capasOcultas,0.01,0.001);
 		
 		//se entrena la red
-		red.entrenarRed();
+		red2.entrenarRed();
 		
 		
->>>>>>> f2d751db0100e69b9b005aea463251ab0039250a
+
 	}
 
 }
