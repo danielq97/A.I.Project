@@ -50,6 +50,10 @@ public class RedNeuronal {
 			}
 		}
 	}
+	
+	public void predecir() {
+		
+	}
 
 	private void inicializarRed() {
 		// Primera capa
