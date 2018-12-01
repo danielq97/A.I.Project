@@ -3,7 +3,63 @@ package implementation;
 public class Capa {
 
 	private String tipo;
-    private int numNeuronas;
+    private int neuronasFuente;
+    private int neuronasDestino;
+    
+    private double[][] capa;
+    
+    private double[] salidaCapa;
+    
+    public Capa(int neuronasFuente, int neuronasDestino) {
+    	this.neuronasFuente = neuronasFuente;
+    	this.neuronasDestino = neuronasDestino;
+    	
+    	generarMatriz();
+    }
+    
+    private void generarMatriz() {
+    	capa = new double[neuronasFuente][neuronasDestino];
+    	
+    	for(int i = 0; i < neuronasFuente;i++) {
+    		for(int j = 0; j< neuronasDestino; j ++) {
+    			capa[i][j] = Math.random();
+    		}
+    	}
+    }
+    
+    public int getNeuronasFuente() {
+		return neuronasFuente;
+	}
+
+	public void setNeuronasFuente(int neuronasFuente) {
+		this.neuronasFuente = neuronasFuente;
+	}
+
+	public int getNeuronasDestino() {
+		return neuronasDestino;
+	}
+
+	public void setNeuronasDestino(int neuronasDestino) {
+		this.neuronasDestino = neuronasDestino;
+	}
+
+	public double[][] getCapa() {
+		return capa;
+	}
+
+	public void setCapa(double[][] capa) {
+		this.capa = capa;
+	}
+
+	public double[] getSalidaCapa() {
+		return salidaCapa;
+	}
+
+	public void setSalidaCapa(double[] salidaCapa) {
+		this.salidaCapa = salidaCapa;
+	}
+
+	
 	
 	
 	public final static String entrada = "ENTRADA";
