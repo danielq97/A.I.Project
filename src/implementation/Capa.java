@@ -97,5 +97,71 @@ public class Capa {
 		return tipo.equals(salida);
 	}
 	
+
+	
+	/* 
+	 * Este método se encarga de  multipplicar las matrices 
+	 * recibidas por parametro 
+	 * 
+	 */
+	public double[][] multiplicacionMtrix(double[][]a, double[][]b) {
+		
+		double [][] VectorSalida= new double[a.length][b[0].length];
+		//* es necesario verificar que las matrices se pueden multiplicar
+		
+		if(a[0].length== b.length ) {
+			
+			for(int i=0; i< a.length; i++) {
+				for(int j=0; j< b[0].length; j++) {
+					for(int k=0; k<a[0].length; k++) {
+						/* aqui se multiplica la matriz*/
+						VectorSalida[i][j]+= a[i][k]* b[k][j];
+					}
+				}
+			}
+		}
+		
+		
+		/* si la condición no se cumple la matriz se retorna vacia*/
+		return VectorSalida;
+	}
+	
+	
+	
+	public double[][] Activacion(double[][] matrix){
+		
+		/*
+		 * matriz de salida de neuronas ocultas
+		 */
+		double[][]sno= new double[matrix.length][ matrix[0].length];
+
+		
+		for(int i=0; i< matrix.length; i++) {
+			
+			for (int j=0; j< matrix[0].length; j++) {
+				
+				sno[i][j]=  1 / (1 + Math.pow(Math.E, -(matrix[i][j]))); 
+				
+				
+				
+			}
+		}
+		
+		
+
+		return sno;
+		
+	}
+	
+	
+	
+	
+	
+ 
+
+	
+	
+	
+	
 	
 }
