@@ -6,7 +6,7 @@ public class Capa {
     private int neuronasFuente;
     private int neuronasDestino;
     
-    private double[][] capa;
+    private double[][] pesos;
     
     private double[] salidaCapa;
     
@@ -18,11 +18,11 @@ public class Capa {
     }
     
     private void generarMatriz() {
-    	capa = new double[neuronasFuente][neuronasDestino];
+    	pesos = new double[neuronasFuente][neuronasDestino];
     	
     	for(int i = 0; i < neuronasFuente;i++) {
     		for(int j = 0; j< neuronasDestino; j ++) {
-    			capa[i][j] = Math.random();
+    			pesos[i][j] = Math.random();
     		}
     	}
     }
@@ -43,12 +43,12 @@ public class Capa {
 		this.neuronasDestino = neuronasDestino;
 	}
 
-	public double[][] getCapa() {
-		return capa;
+	public double[][] getPesos() {
+		return pesos;
 	}
 
-	public void setCapa(double[][] capa) {
-		this.capa = capa;
+	public void setPesos(double[][] capa) {
+		this.pesos = pesos;
 	}
 
 	public double[] getSalidaCapa() {
@@ -97,8 +97,6 @@ public class Capa {
 		return tipo.equals(salida);
 	}
 	
-
-	
 	/* 
 	 * Este método se encarga de  multipplicar las matrices 
 	 * recibidas por parametro 
@@ -134,8 +132,7 @@ public class Capa {
 		 * matriz de salida de neuronas ocultas
 		 */
 		double[][]sno= new double[matrix.length][ matrix[0].length];
-
-		
+ 		
 		for(int i=0; i< matrix.length; i++) {
 			
 			for (int j=0; j< matrix[0].length; j++) {
@@ -148,19 +145,9 @@ public class Capa {
 		}
 		
 		
-
-		return sno;
+ 		return sno;
 		
 	}
-	
-	
-	
-	
-	
- 
-
-	
-	
 	
 	
 	

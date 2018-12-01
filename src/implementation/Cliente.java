@@ -10,6 +10,7 @@ public class Cliente {
 		
 		RedNeuronal red = new RedNeuronal(x, y, capasOcultas);
 
+		red.backpropagation();
 	}
 
 }
