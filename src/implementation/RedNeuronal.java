@@ -76,10 +76,7 @@ public class RedNeuronal {
 		// Capa de última oculta a neuronas salida
 		capas.add(new Capa(tamCapasOcultas[tamCapasOcultas.length - 1], getNumNeuronasSalida()));
 		
-		//Capa salida a salida, (la hago para poderle poner una capa de  salida( ya son las salidas
-		//de la red), y poder calcular los errores
-		capas.add(new Capa(getNumNeuronasSalida(), getNumNeuronasSalida()));
-		System.out.println( " numero neu salidas " + getNumNeuronasSalida());
+		
 	}
 
 	private int getNumNeuronasSalida() {
@@ -97,9 +94,9 @@ public class RedNeuronal {
 	//Este método se hizo, sólo para agregar capas de salida aleatorias
 	//pero todo esto lo debe reemplazar la propagación hacia adelante
 	public void agregarCapasSalida( ) {
-		for (int i = 1; i < capas.size(); i++) {
-			int numeroNeuronasFuente = capas.get(i).getNeuronasFuente();
-			double [] salidas = new double [numeroNeuronasFuente];
+		for (int i = 0; i < capas.size(); i++) {
+			int numeroNeuronasDestino = capas.get(i).getNeuronasDestino();
+			double [] salidas = new double [numeroNeuronasDestino];
 			for (int j = 0; j < salidas.length; j++) {
 				salidas[j] = Math.random();
 			}
@@ -135,13 +132,13 @@ public class RedNeuronal {
 		ArrayList<double[]> erroresCapasOcultas = new ArrayList<>();
 		// Inicializo en valores 0 para que me permita después hacer seteo, de las
 		// posiciones e insertar inverso
-		for (int i = 0; i < (capas.size() - 2); i++) {
+		for (int i = 0; i < (capas.size() - 1); i++) {
 			erroresCapasOcultas.add(new double[] { 0.0 });
 		}
 		// Pongo que recorra las capas ocultas, le resto al tamaño de las capas 2, que
 		// son
 		// la de entrada y la de salida , empiza desde la última oculta
-		for (int i = (capas.size() - 2); i > 0; i--) {
+		for (int i = (capas.size() - 2); i >= 0; i--) {
 			// Error de capa específica, obtengo el tamaño de salidas de
 			// la capa oculta especifica. Obtengo la capa de salida de la capa actual, y la
 			// capa actual
@@ -149,22 +146,25 @@ public class RedNeuronal {
 			double[] salidasCapa = capas.get(i).getSalidaCapa();
 			double[] errorCapas = new double[capas.get(i).getSalidaCapa().length];
 			// Hallo los errores por cada salida de la capa
-			for (int j = 0; j < salidasCapa.length; j++) {
+			for (int j = 0, L= 0; j < actual.getPesos().length && L <salidasCapa.length; j++, L++) {
 				// Saco la sumatoria desde K=1 hasta P de Who(j,k) * ERROR DE SALIDAS DE P
 				// Pesos a todas las salidas
 				double sum = 0;
 				double[] pesos = actual.getPesos()[j];
 				// Multiplico las parejas
 				for (int k = 0; k < pesos.length; k++) {
-					sum += pesos[k] * erroresCapaSalida[k];
+					for (int k2 = 0; k2 < erroresCapaSalida.length; k2++) {
+						sum += pesos[k] * erroresCapaSalida[k2];
+					}		
+					
 				}
-				double error = salidasCapa[j] * (1 - salidasCapa[j]) * sum;
+				double error = salidasCapa[L] * (1 - salidasCapa[L]) * sum;
 				errorCapas[j] = error;
 
 			}
 			// Agrego los errores de cada capa a La lista de Arreglos
 			//i para que inserte dónde es
-			erroresCapasOcultas.set(i - 1, errorCapas);
+			erroresCapasOcultas.set(i, errorCapas);
 			// Actualizo los errores de la capa de salida, que ya van a ser los nuevos,
 			// porque
 			// voy a analizar una capa más atrás
@@ -176,14 +176,14 @@ public class RedNeuronal {
 		// Para la última capa oculta y de salida, empiezo a modificar los pesos de
 		// atrás para adelante
 		// acá estoy modificando matriz Who:
-		Capa ultimaOculta = capas.get(capas.size() - 2);
+		Capa ultimaOculta = capas.get(capas.size() - 1);
 		double[] salidasCapa = ultimaOculta.getSalidaCapa();
 		double pesosSalida[][] = ultimaOculta.getPesos();
 		double tasaDeAprendizaje = 0.25;
 		for (int j = 0; j < pesosSalida.length; j++) {
 			for (int k = 0; k < pesosSalida[j].length; k++) {
 				pesosSalida[j][k] = pesosSalida[j][k]
-						+ tasaDeAprendizaje * salidasCapa[j] * respaldoErroresCapaSalida[k];
+						+ tasaDeAprendizaje * salidasCapa[k] * respaldoErroresCapaSalida[k];
 			}
 		}
 		// Modifico la matriz de pesos
@@ -191,7 +191,7 @@ public class RedNeuronal {
 
 		// Ahora cambio desde la penúltima capa oculta, a la de entrada.
 		// Empiezo cambiando Whh, y al final Weh
-		for (int i = (capas.size() - 3); i >= 0; i--) {
+		for (int i = (capas.size() - 2); i >= 0; i--) {
 
 			Capa actual = capas.get(i);
 			double[] salidasCapa1 = actual.getSalidaCapa();
@@ -207,7 +207,7 @@ public class RedNeuronal {
 				
 
 				for (int k = 0; k < pesosSalida1[j].length; k++) {
-					pesosSalida1[j][k] = pesosSalida1[j][k] + tasaDeAprendizaje * salidasCapa1[j] * erroresCapa[k];
+					pesosSalida1[j][k] = pesosSalida1[j][k] + tasaDeAprendizaje * salidasCapa1[k] * erroresCapa[k];
 				}
 			}
 			// Modifico la matriz de pesos

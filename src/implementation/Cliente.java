@@ -35,12 +35,12 @@ public class Cliente {
 		System.out.println("Salida: " + red.getCapas().get(red.getCapas().size() - 1).getSalidaCapa()[0]);
 		
 		
-
-		RedNeuronal red2 = new RedNeuronal(x, y, capasOcultas,0.01,0.001);
-		
-		//se entrena la red
-		red2.entrenarRed();
-		
+//
+//		RedNeuronal red2 = new RedNeuronal(x, y, capasOcultas,0.01,0.001);
+//		
+//		//se entrena la red
+//		red2.entrenarRed();
+//		
 		
 
 	}
