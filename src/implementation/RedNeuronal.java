@@ -29,8 +29,8 @@ public class RedNeuronal {
 		this.X = X;
 		this.Y = Y;
 		this.tamCapasOcultas = tamCapasOcultas;
-		this.learningRate = learningRate;
-		this.learningRate = minLearning;
+		this.learningRate = 0.45;
+		this.minLearning = minLearning;
 
 		this.capas = new ArrayList<Capa>();
 
@@ -174,7 +174,7 @@ public class RedNeuronal {
 			erroresCapaSalida[i] = error;
 			respaldoErroresCapaSalida[i] = error;
 		}
-
+       capas.get(capas.size()-1).setErrores(respaldoErroresCapaSalida);
 		System.out.println("numero capas salida: " + getNumNeuronasSalida());
 
 		// Lo hago ahora para las capas ocultas, creo una lista de arreglos

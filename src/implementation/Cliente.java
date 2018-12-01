@@ -15,20 +15,32 @@ public class Cliente {
 
 		RedNeuronal red = new RedNeuronal(x, y, capasOcultas, 0.01, 0.001);
 
-		red.feedforward(x1);
-
-		for (int i = 0; i < red.getCapas().size(); i++) {
-			System.out.println("El tamaño de la cap es"+red.getCapas().size() );
-
-			double[] m = red.getCapas().get(i).getSalidaCapa();
-
-			for (int j = 0; j < m.length; j++) {
-
-				System.out.print(m[j] + "\t");
-			}
-			System.out.println();
-
+	
+//		for (int i = 0; i < red.getCapas().size(); i++) {
+//			System.out.println("El tamaño de la cap es"+red.getCapas().size() );
+//
+//			double[] m = red.getCapas().get(i).getSalidaCapa();
+//
+//			for (int j = 0; j < m.length; j++) {
+//
+//				System.out.print(m[j] + "\t");
+//			}
+//			System.out.println();
+//
+//		}
+		
+		//Cada vez debe dar un valor más cercano a 1
+		for (int i = 0; i < 50; i++) {
+			red.feedforward(x1);
+			red.backpropagation();
+			System.out.println("Salida: " + red.getCapas().get(red.getCapas().size() - 1).getSalidaCapa()[0]);
 		}
+		
+		
+		
+		
+		
+		
 
 		// Ensayo ciclos cada vez agregandoCapasDeSalida, cuándo
 		// este el forward se reemplaza agregarCapasSalida
