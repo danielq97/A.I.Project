@@ -7,56 +7,61 @@ import java.util.HashSet;
 public class RedNeuronal {
 
 	// Variables independientes.
-	private Double[][] X;
-	
+	private double[][] X;
 
 	// Variables dependientes u objetivos.
-	private Double[] Y;
-
-	
+	private double[] Y;
 
 	// Arreglo para el numero de neuronas de cada capa oculta.
 	private int[] tamCapasOcultas;
 
 	private ArrayList<Capa> capas;
-	
+
 	private double learningRate;
-	private double minLearning;
+	
+	private int maxEpoch;
 
-
-
-	public RedNeuronal(Double[][] X, Double[] Y, int[] tamCapasOcultas, double learningRate, double minLearning) {
+	public RedNeuronal(double[][] X, double[] Y, int[] tamCapasOcultas, double learningRate, int maxEpoch) {
 		this.X = X;
 		this.Y = Y;
 		this.tamCapasOcultas = tamCapasOcultas;
 		this.learningRate = 0.45;
-		this.minLearning = minLearning;
+		this.maxEpoch = maxEpoch;
 
 		this.capas = new ArrayList<Capa>();
 
 		inicializarRed();
-		
-		 
+
 		for (int i = 0; i < capas.size(); i++) {
 			Capa capa = capas.get(i);
 			System.out.println(capa.getNeuronasFuente() + "-" + capa.getNeuronasDestino());
 		}
 	}
-	
-	//Metodo para entrenar la red.
+
+	// Metodo para entrenar la red.
 	public void entrenarRed() {
-		boolean keepLearning = true;
-		while(keepLearning) {
-			//feedforward
-			backpropagation();
-			double[] erroresUltimaCapa = capas.get(capas.size()-1).getErrores();
-			for(int i = 0; i < erroresUltimaCapa.length; i++) {
-				if(erroresUltimaCapa[i]<minLearning) {keepLearning=false;}
+				
+		//Numero de epocas
+		for(int epoca = 1; epoca< maxEpoch; epoca++) {
+			System.out.println("EPOCA-"+epoca);
+			System.out.println("--------------------------------------------------------------------------------------------------------");
+			//Cliclo para cada muestra = Epoca
+			for (int i = 0; i < X.length; i++) {
+				double[][] x1 = new double[1][X[0].length];
+				x1[0] = X[i];
+				
+				feedforward(x1);
+				backpropagation();				
+				System.out.print("Muestra: ");
+				for(int x = 0; x<x1[0].length;x++) {System.out.print(x1[0][x]+" ");}
+				System.out.println("- Salida: "+capas.get(capas.size()-1).getSalidaCapa()[0]);
 			}
+			System.out.println("--------------------------------------------------------------------------------------------------------");
+			System.out.println("\n");
 		}
 	}
-	
-	public void predecir() {
+
+	public void predecir(double[] yEsperado,double[] yPrueba) {
 		
 	}
 
@@ -72,7 +77,6 @@ public class RedNeuronal {
 		// Primera capa
 		capas.add(new Capa(X.length, tamCapasOcultas[0]));
 
-		System.out.println(X.length);
 		// capas ocultas
 		for (int i = 1; i < tamCapasOcultas.length; i++) {
 			capas.add(new Capa(tamCapasOcultas[i - 1], tamCapasOcultas[i]));
@@ -80,14 +84,15 @@ public class RedNeuronal {
 
 		// Capa de última oculta a neuronas salida
 		capas.add(new Capa(tamCapasOcultas[tamCapasOcultas.length - 1], getNumNeuronasSalida()));
-		
-		
+
 	}
 
 	private int getNumNeuronasSalida() {
-		HashSet<Double> hash = new HashSet<Double>();
-		ArrayList<Double> aux = new ArrayList<>(Arrays.asList(Y));
-		hash.addAll(aux);
+		//Convertir de double[] a Double[]
+		Double[] auxY = new Double[Y.length];
+		for(int i = 0; i < auxY.length; i++) {auxY[i]=Double.valueOf(Y[i]);}
+		ArrayList<Double> aux = new ArrayList<Double>(Arrays.asList(auxY));
+		HashSet<Double> hash = new HashSet<Double>(aux);		
 
 		if (hash.size() > 2) {
 			return hash.size();
@@ -95,65 +100,44 @@ public class RedNeuronal {
 			return 1;
 		}
 	}
-	
-	//Este método se hizo, sólo para agregar capas de salida aleatorias
-	//pero todo esto lo debe reemplazar la propagación hacia adelante
-	public void agregarCapasSalida( ) {
+
+	// Este método se hizo, sólo para agregar capas de salida aleatorias
+	// pero todo esto lo debe reemplazar la propagación hacia adelante
+	private void agregarCapasSalida() {
 		for (int i = 0; i < capas.size(); i++) {
 			int numeroNeuronasDestino = capas.get(i).getNeuronasDestino();
-			double [] salidas = new double [numeroNeuronasDestino];
+			double[] salidas = new double[numeroNeuronasDestino];
 			for (int j = 0; j < salidas.length; j++) {
 				salidas[j] = Math.random();
 			}
 			capas.get(i).setSalidaCapa(salidas);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * 
 	 * @param x1: matriz que será multiplicada por la matriz de pesos indicada
 	 */
-	
-	
-	public void feedforward(double [][] x1) {
-			
-		
-		/*salida capa*/
-	 double[][] salida= capas.get(0).multiplicacionMtrix(x1, capas.get(0).getPesos());
-	 
-	 /* 2b*/
-	 double[][] c= capas.get(0).Activacion(salida);
-	 
-	 capas.get(0).setSalidaCapa(c[0]);
-	 
-	 double[][] example=new double[1][ capas.get(0).getSalidaCapa().length];
-	 example[0]=capas.get(0).getSalidaCapa();
-	 
-	 
-	 
-	 for ( int i=1; i<capas.size();i++) {
-		 
-		 double[][] salid1= capas.get(i).multiplicacionMtrix(example, capas.get(i).getPesos());
-		 
-		 /* 2b*/
-		 
-		capas.get(i).setSalidaCapa(capas.get(i).Activacion(salid1)[0]) ; 
-		
- 
-	 }
-	 
-	 
-	 
-	 
-		
+
+	public void feedforward(double[][] x1) {
+
+		/* salida capa */
+		double[][] salida = capas.get(0).multiplicacionMtrix(x1, capas.get(0).getPesos());
+		double[][] c = capas.get(0).Activacion(salida);
+
+		capas.get(0).setSalidaCapa(c[0]);
+
+		double[][] example = new double[1][capas.get(0).getSalidaCapa().length];
+		example[0] = capas.get(0).getSalidaCapa();
+
+		for (int i = 1; i < capas.size(); i++) {
+
+			double[][] salid1 = capas.get(i).multiplicacionMtrix(example, capas.get(i).getPesos());
+			capas.get(i).setSalidaCapa(capas.get(i).Activacion(salid1)[0]);
+
+		}
+
 	}
-	
 
 	public void backpropagation() {
 
@@ -174,9 +158,8 @@ public class RedNeuronal {
 			erroresCapaSalida[i] = error;
 			respaldoErroresCapaSalida[i] = error;
 		}
-       capas.get(capas.size()-1).setErrores(respaldoErroresCapaSalida);
-		System.out.println("numero capas salida: " + getNumNeuronasSalida());
-
+		capas.get(capas.size() - 1).setErrores(respaldoErroresCapaSalida);
+		
 		// Lo hago ahora para las capas ocultas, creo una lista de arreglos
 		// de double para guardar los errores de cada capa
 		ArrayList<double[]> erroresCapasOcultas = new ArrayList<>();
@@ -196,7 +179,7 @@ public class RedNeuronal {
 			double[] salidasCapa = capas.get(i).getSalidaCapa();
 			double[] errorCapas = new double[capas.get(i).getSalidaCapa().length];
 			// Hallo los errores por cada salida de la capa
-			for (int j = 0, L= 0; j < actual.getPesos().length && L <salidasCapa.length; j++, L++) {
+			for (int j = 0, L = 0; j < actual.getPesos().length && L < salidasCapa.length; j++, L++) {
 				// Saco la sumatoria desde K=1 hasta P de Who(j,k) * ERROR DE SALIDAS DE P
 				// Pesos a todas las salidas
 				double sum = 0;
@@ -205,15 +188,15 @@ public class RedNeuronal {
 				for (int k = 0; k < pesos.length; k++) {
 					for (int k2 = 0; k2 < erroresCapaSalida.length; k2++) {
 						sum += pesos[k] * erroresCapaSalida[k2];
-					}		
-					
+					}
+
 				}
 				double error = salidasCapa[L] * (1 - salidasCapa[L]) * sum;
 				errorCapas[j] = error;
 
 			}
 			// Agrego los errores de cada capa a La lista de Arreglos
-			//i para que inserte dónde es
+			// i para que inserte dónde es
 			erroresCapasOcultas.set(i, errorCapas);
 			// Actualizo los errores de la capa de salida, que ya van a ser los nuevos,
 			// porque
@@ -229,11 +212,10 @@ public class RedNeuronal {
 		Capa ultimaOculta = capas.get(capas.size() - 1);
 		double[] salidasCapa = ultimaOculta.getSalidaCapa();
 		double pesosSalida[][] = ultimaOculta.getPesos();
-		
+
 		for (int j = 0; j < pesosSalida.length; j++) {
 			for (int k = 0; k < pesosSalida[j].length; k++) {
-				pesosSalida[j][k] = pesosSalida[j][k]
-						+ learningRate * salidasCapa[k] * respaldoErroresCapaSalida[k];
+				pesosSalida[j][k] = pesosSalida[j][k] + learningRate * salidasCapa[k] * respaldoErroresCapaSalida[k];
 			}
 		}
 		// Modifico la matriz de pesos
@@ -254,7 +236,6 @@ public class RedNeuronal {
 
 			double[] erroresCapa = erroresCapasOcultas.get(i);
 			for (int j = 0; j < pesosSalida1.length; j++) {
-				
 
 				for (int k = 0; k < pesosSalida1[j].length; k++) {
 					pesosSalida1[j][k] = pesosSalida1[j][k] + learningRate * salidasCapa1[k] * erroresCapa[k];
