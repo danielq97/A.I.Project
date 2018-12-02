@@ -18,14 +18,14 @@ public class RedNeuronal {
 	private ArrayList<Capa> capas;
 
 	private double learningRate;
-	
+
 	private int maxEpoch;
 
 	public RedNeuronal(double[][] X, double[] Y, int[] tamCapasOcultas, double learningRate, int maxEpoch) {
 		this.X = X;
 		this.Y = Y;
 		this.tamCapasOcultas = tamCapasOcultas;
-		this.learningRate = 0.45;
+		this.learningRate = learningRate;
 		this.maxEpoch = maxEpoch;
 
 		this.capas = new ArrayList<Capa>();
@@ -40,29 +40,34 @@ public class RedNeuronal {
 
 	// Metodo para entrenar la red.
 	public void entrenarRed() {
-				
-		//Numero de epocas
-		for(int epoca = 1; epoca< maxEpoch; epoca++) {
-			System.out.println("EPOCA-"+epoca);
-			System.out.println("--------------------------------------------------------------------------------------------------------");
-			//Cliclo para cada muestra = Epoca
+
+		// Numero de epocas
+		for (int epoca = 1; epoca < maxEpoch; epoca++) {
+			System.out.println("EPOCA-" + epoca);
+			System.out.println(
+					"--------------------------------------------------------------------------------------------------------");
+			// Cliclo para cada muestra = Epoca
 			for (int i = 0; i < X.length; i++) {
 				double[][] x1 = new double[1][X[0].length];
 				x1[0] = X[i];
-				
+
 				feedforward(x1);
-				backpropagation();				
+				backpropagation();
 				System.out.print("Muestra: ");
-				for(int x = 0; x<x1[0].length;x++) {System.out.print(x1[0][x]+" ");}
-				System.out.println("- Salida: "+capas.get(capas.size()-1).getSalidaCapa()[0]);
+				for (int x = 0; x < x1[0].length; x++) {
+					System.out.print(x1[0][x] + " ");
+				}
+				System.out.println("- Salida: " + capas.get(capas.size() - 1).getSalidaCapa()[i]);
 			}
-			System.out.println("--------------------------------------------------------------------------------------------------------");
+			System.out.println(
+					"--------------------------------------------------------------------------------------------------------");
 			System.out.println("\n");
 		}
+		System.out.println("Las neuronas de salida son: " + getNumNeuronasSalida());
 	}
 
-	public void predecir(double[] yEsperado,double[] yPrueba) {
-		
+	public void predecir(double[] yEsperado, double[] yPrueba) {
+
 	}
 
 	public ArrayList<Capa> getCapas() {
@@ -88,17 +93,22 @@ public class RedNeuronal {
 	}
 
 	private int getNumNeuronasSalida() {
-		//Convertir de double[] a Double[]
-		Double[] auxY = new Double[Y.length];
-		for(int i = 0; i < auxY.length; i++) {auxY[i]=Double.valueOf(Y[i]);}
-		ArrayList<Double> aux = new ArrayList<Double>(Arrays.asList(auxY));
-		HashSet<Double> hash = new HashSet<Double>(aux);		
+//		// Convertir de double[] a Double[]
+//		Double[] auxY = new Double[Y.length];
+//		for (int i = 0; i < auxY.length; i++) {
+//			auxY[i] = Double.valueOf(Y[i]);
+//		}
+//		ArrayList<Double> aux = new ArrayList<Double>(Arrays.asList(auxY));
+//		HashSet<Double> hash = new HashSet<Double>(aux);
+//
+//		if (hash.size() >= 2) {
+//			return 4;
+//		} else {
+//			return 1;
+//		}
 
-		if (hash.size() > 2) {
-			return hash.size();
-		} else {
-			return 1;
-		}
+		
+		return Y.length;
 	}
 
 	// Este método se hizo, sólo para agregar capas de salida aleatorias
@@ -116,7 +126,8 @@ public class RedNeuronal {
 
 	/**
 	 * 
-	 * @param x1: matriz que será multiplicada por la matriz de pesos indicada
+	 * @param x1:
+	 *            matriz que será multiplicada por la matriz de pesos indicada
 	 */
 
 	public void feedforward(double[][] x1) {
@@ -135,6 +146,7 @@ public class RedNeuronal {
 			double[][] salid1 = capas.get(i).multiplicacionMtrix(example, capas.get(i).getPesos());
 			capas.get(i).setSalidaCapa(capas.get(i).Activacion(salid1)[0]);
 
+			example[0] = capas.get(i).getSalidaCapa();
 		}
 
 	}
@@ -159,7 +171,7 @@ public class RedNeuronal {
 			respaldoErroresCapaSalida[i] = error;
 		}
 		capas.get(capas.size() - 1).setErrores(respaldoErroresCapaSalida);
-		
+
 		// Lo hago ahora para las capas ocultas, creo una lista de arreglos
 		// de double para guardar los errores de cada capa
 		ArrayList<double[]> erroresCapasOcultas = new ArrayList<>();
